@@ -30,17 +30,23 @@ public class Server {
                     public void run() {
                         try {
                             final var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                            Request request = new Request(in);
+                            final var out = new BufferedOutputStream(socket.getOutputStream());
+                            Request request = new Request(in, fileNames);
 
                             String requestMethod = request.getMethod();
                             String requestPath = request.getPath();
-                            System.out.println("hi");
-                            System.out.println(requestMethod + " " + requestPath);
-                            Handler existingHander = ExistingHandler.getHanderByParams(requestMethod, requestPath);
-                            if (existingHander != null) {
-                                existingHander.handle(request,
-                                        new BufferedOutputStream(socket.getOutputStream()));
+
+                            if (requestMethod == null || requestPath == null) {
+                                ResponseError.getNotFoundError(out);
+                            } else {
+                                Handler existingHander = ExistingHandler.getHanderByParams(requestMethod, requestPath);
+                                if (existingHander != null) {
+                                    existingHander.handle(request, out);
+                                } else {
+                                    ResponseError.getNotFoundError(out);
+                                }
                             }
+
                         } catch (IOException e) {
                             System.out.println("Error inside thread");
                             e.printStackTrace();

@@ -13,7 +13,6 @@ public class ExistingHandler {
         for (ExistingHandler existingHandlerElement: existingHandlers) {
             if (existingHandlerElement.getMethod().equals(method)) {
                 if (existingHandlerElement.getPath().equals(path)) {
-                    System.out.println(existingHandlerElement.getHandler().toString());
                     return existingHandlerElement.getHandler();
                 }
             }
@@ -29,8 +28,6 @@ public class ExistingHandler {
         this.method = method;
         this.path = path;
         this.handler = handler;
-
-        System.out.println(method + " " + path + " " + handler.toString());
     }
 
     public String getMethod() {
