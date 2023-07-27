@@ -1,5 +1,9 @@
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,15 +30,13 @@ public class Main {
         final var server = new Server(fileNames);
 
         server.addHandler("GET", "/spring.svg", new Handler() {
-            public void handle(Request request, BufferedOutputStream responseStream) {
-                // TODO: handlers code
-                System.out.println("hello from GET");
+            public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
+                Response.response(request, responseStream);
             }
         });
-        server.addHandler("POST", "/messages", new Handler() {
-            public void handle(Request request, BufferedOutputStream responseStream) {
-                // TODO: handlers code
-                System.out.println("hello from POST");
+        server.addHandler("GET", "/app.js", new Handler() {
+            public void handle(Request request, BufferedOutputStream responseStream) throws IOException {
+                Response.response(request, responseStream);
             }
         });
 
