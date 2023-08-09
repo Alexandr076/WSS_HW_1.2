@@ -12,7 +12,7 @@ public class ExistingHandler {
     public static Handler getHanderByParams(String method, String path) {
         for (ExistingHandler existingHandlerElement: existingHandlers) {
             if (existingHandlerElement.getMethod().equals(method)) {
-                if (existingHandlerElement.getPath().equals(path)) {
+                if (path.startsWith(existingHandlerElement.getPath())) {
                     return existingHandlerElement.getHandler();
                 }
             }
