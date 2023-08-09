@@ -1,14 +1,10 @@
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 
 public class Request {
