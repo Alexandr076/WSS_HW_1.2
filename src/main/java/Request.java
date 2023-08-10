@@ -18,6 +18,15 @@ public class Request {
         return query;
     }
 
+    public String getQueryParam(String name) {
+        for (NameValuePair el: query) {
+            if (el.getName().equals(name)) {
+                return el.getValue();
+            }
+        }
+        return "";
+    }
+
     public String getPath() {
         return path;
     }
