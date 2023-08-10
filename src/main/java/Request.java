@@ -1,12 +1,31 @@
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class Request {
 
     private String method;
     private String path;
-    private String headers;
+    private List<NameValuePair> query;
     private String body;
+
+    public List getQuery() {
+        return query;
+    }
+
+    public String getQueryParam(String name) {
+        for (NameValuePair el: query) {
+            if (el.getName().equals(name)) {
+                return el.getValue();
+            }
+        }
+        return "";
+    }
 
     public String getPath() {
         return path;
@@ -16,68 +35,23 @@ public class Request {
         return method;
     }
 
-    public String getHeaders() {
-        return headers;
-    }
-
     public String getBody() {
         return body;
     }
 
-    public Request(BufferedReader in) throws IOException {
+    public Request(BufferedReader in, List<String> fileNames) throws IOException {
         final var requestLine = in.readLine();
         final var parts = requestLine.split(" ");
 
-
         if (parts.length != 3) {
-            // just close socket
             return;
         }
-//
-//
-//        final var path = parts[1];
-//        if (!validPaths.contains(path)) {
-//            out.write((
-//                    "HTTP/1.1 404 Not Found\r\n" +
-//                            "Content-Length: 0\r\n" +
-//                            "Connection: close\r\n" +
-//                            "\r\n"
-//            ).getBytes());
-//            out.flush();
-//            return;
-//        }
-//
-//        final var filePath = Path.of(".", "public", path);
-//        final var mimeType = Files.probeContentType(filePath);
-//
-//        // special case for classic
-//        if (path.equals("/classic.html")) {
-//            final var template = Files.readString(filePath);
-//            final var content = template.replace(
-//                    "{time}",
-//                    LocalDateTime.now().toString()
-//            ).getBytes();
-//            out.write((
-//                    "HTTP/1.1 200 OK\r\n" +
-//                            "Content-Type: " + mimeType + "\r\n" +
-//                            "Content-Length: " + content.length + "\r\n" +
-//                            "Connection: close\r\n" +
-//                            "\r\n"
-//            ).getBytes());
-//            out.write(content);
-//            out.flush();
-//            return;
-//        }
-//
-//        final var length = Files.size(filePath);
-//        out.write((
-//                "HTTP/1.1 200 OK\r\n" +
-//                        "Content-Type: " + mimeType + "\r\n" +
-//                        "Content-Length: " + length + "\r\n" +
-//                        "Connection: close\r\n" +
-//                        "\r\n"
-//        ).getBytes());
-//        Files.copy(filePath, out);
-//        out.flush();
+        method = parts[0];
+        path = StringUtils.substringBefore(parts[1], '?');
+        String queryStr = StringUtils.substringAfter(parts[1], '?');
+
+        // getQueryParam and getQueryParams were deprecated, so
+
+        query = URLEncodedUtils.parse(queryStr, StandardCharsets.UTF_8);
     }
 }
